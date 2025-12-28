@@ -85,7 +85,9 @@ fun GlassIconButton(
             .then(
                 if (showGlow) {
                     Modifier.drawWithContent {
-                        drawContent()
+                        val centerX = this.size.width / 2f
+                        val centerY = this.size.height / 2f
+                        val minDim = minOf(this.size.width, this.size.height)
                         drawCircle(
                             brush = Brush.radialGradient(
                                 colors = listOf(
@@ -93,10 +95,11 @@ fun GlassIconButton(
                                     glowColor.copy(alpha = 0.3f),
                                     Color.Transparent
                                 ),
-                                center = Offset(size.width / 2, size.height / 2),
-                                radius = size.minDimension * 0.7f
+                                center = Offset(centerX, centerY),
+                                radius = minDim * 0.7f
                             )
                         )
+                        drawContent()
                     }
                 } else Modifier
             )
@@ -158,14 +161,18 @@ fun GlassPlayButton(
             }
             .drawWithContent {
                 // Outer glow
+                val centerX = size.width / 2f
+                val centerY = size.height / 2f
+                val minDim = minOf(size.width, size.height)
                 drawCircle(
                     brush = Brush.radialGradient(
                         colors = listOf(
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                            Color.White.copy(alpha = 0.3f),
+                            Color.White.copy(alpha = 0.15f),
                             Color.Transparent
                         ),
-                        radius = size.toPx() * 0.65f
+                        center = Offset(centerX, centerY),
+                        radius = minDim * 0.65f
                     )
                 )
                 drawContent()

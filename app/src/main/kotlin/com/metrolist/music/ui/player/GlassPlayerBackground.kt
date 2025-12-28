@@ -77,7 +77,6 @@ fun GlassPlayerBlurBackground(
                         model = ImageRequest.Builder(context)
                             .data(url)
                             .size(200, 200)
-                            .allowHardware(false)
                             .build(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
@@ -100,19 +99,21 @@ fun GlassPlayerBlurBackground(
                             .drawWithContent {
                                 drawContent()
 
+                                val maxDim = maxOf(size.width, size.height)
+
                                 // First ambient orb
                                 drawRect(
                                     brush = Brush.radialGradient(
                                         colors = listOf(
-                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.35f * alpha),
-                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.15f * alpha),
+                                            Color.White.copy(alpha = 0.2f * alpha),
+                                            Color.White.copy(alpha = 0.1f * alpha),
                                             Color.Transparent
                                         ),
                                         center = Offset(
                                             size.width * (0.2f + shimmer1 * 0.3f),
                                             size.height * (0.3f + shimmer2 * 0.2f)
                                         ),
-                                        radius = size.maxDimension * 0.6f
+                                        radius = maxDim * 0.6f
                                     )
                                 )
 
@@ -120,15 +121,15 @@ fun GlassPlayerBlurBackground(
                                 drawRect(
                                     brush = Brush.radialGradient(
                                         colors = listOf(
-                                            MaterialTheme.colorScheme.tertiary.copy(alpha = 0.25f * alpha),
-                                            MaterialTheme.colorScheme.secondary.copy(alpha = 0.12f * alpha),
+                                            Color.White.copy(alpha = 0.15f * alpha),
+                                            Color.White.copy(alpha = 0.08f * alpha),
                                             Color.Transparent
                                         ),
                                         center = Offset(
                                             size.width * (0.8f - shimmer2 * 0.3f),
                                             size.height * (0.7f - shimmer1 * 0.2f)
                                         ),
-                                        radius = size.maxDimension * 0.5f
+                                        radius = maxDim * 0.5f
                                     )
                                 )
 
@@ -164,14 +165,15 @@ fun GlassPlayerBlurBackground(
                         .drawWithContent {
                             drawContent()
 
+                            val maxDim = maxOf(size.width, size.height)
                             drawRect(
                                 brush = Brush.radialGradient(
                                     colors = listOf(
-                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.2f * alpha),
+                                        Color.White.copy(alpha = 0.15f * alpha),
                                         Color.Transparent
                                     ),
                                     center = Offset(size.width * 0.3f, size.height * 0.4f),
-                                    radius = size.maxDimension * 0.6f
+                                    radius = maxDim * 0.6f
                                 )
                             )
                         }
@@ -216,6 +218,7 @@ fun GlassPlayerGradientBackground(
                                 drawContent()
 
                                 // Subtle ambient enhancement
+                                val maxDim = maxOf(size.width, size.height)
                                 drawRect(
                                     brush = Brush.radialGradient(
                                         colors = listOf(
@@ -223,7 +226,7 @@ fun GlassPlayerGradientBackground(
                                             Color.Transparent
                                         ),
                                         center = Offset(size.width * 0.5f, size.height * 0.2f),
-                                        radius = size.maxDimension * 0.5f
+                                        radius = maxDim * 0.5f
                                     )
                                 )
                             }

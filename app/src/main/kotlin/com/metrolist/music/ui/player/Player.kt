@@ -1325,26 +1325,13 @@ fun BottomSheetPlayer(
                                 modifier = Modifier
                                     .height(68.dp)
                                     .weight(playPauseWeight)
-                                    .drawWithContent {
-                                        if (playerBackground == PlayerBackgroundStyle.BLUR ||
-                                            playerBackground == PlayerBackgroundStyle.GRADIENT) {
-                                            drawCircle(
-                                                brush = Brush.radialGradient(
-                                                    colors = listOf(
-                                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-                                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                                                        Color.Transparent
-                                                    ),
-                                                    radius = size.minDimension * 0.8f
-                                                )
-                                            )
-                                        }
-                                        drawContent()
-                                    }
                                     .then(
                                         if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                             playerBackground == PlayerBackgroundStyle.GRADIENT) {
                                             Modifier
+                                                .graphicsLayer {
+                                                    shadowElevation = 12f
+                                                }
                                                 .border(
                                                     width = 1.dp,
                                                     brush = Brush.linearGradient(
