@@ -89,7 +89,7 @@ fun GlassPlayerBlurBackground(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color.Black.copy(alpha = 0.65f * alpha))
+                            .background(Color.Black.copy(alpha = 0.70f * alpha))
                     )
 
                     // Ambient color layers

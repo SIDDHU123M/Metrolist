@@ -698,10 +698,10 @@ fun BottomSheetPlayer(
                                 playerBackground == PlayerBackgroundStyle.GRADIENT) {
                                 Modifier
                                     .clip(RoundedCornerShape(20.dp))
-                                    .background(Color.White.copy(alpha = 0.08f))
+                                    .background(Color.White.copy(alpha = 0.20f))
                                     .border(
-                                        width = 0.5.dp,
-                                        color = Color.White.copy(alpha = 0.15f),
+                                        width = 1.dp,
+                                        color = Color.White.copy(alpha = 0.35f),
                                         shape = RoundedCornerShape(20.dp)
                                     )
                                     .padding(16.dp)
@@ -850,10 +850,10 @@ fun BottomSheetPlayer(
                                     colors = IconButtonDefaults.filledIconButtonColors(
                                         containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                             playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                            Color.White.copy(alpha = 0.12f) else textButtonColor,
+                                            Color.White.copy(alpha = 0.25f) else textButtonColor,
                                         contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                             playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                            Color.White else iconButtonColor,
+                                            Color.White.copy(alpha = 0.95f) else iconButtonColor,
                                     ),
                                     modifier = Modifier
                                         .size(42.dp)
@@ -891,10 +891,10 @@ fun BottomSheetPlayer(
                                     colors = IconButtonDefaults.filledIconButtonColors(
                                         containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                             playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                            Color.White.copy(alpha = 0.12f) else textButtonColor,
+                                            Color.White.copy(alpha = 0.25f) else textButtonColor,
                                         contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                             playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                            Color.White else iconButtonColor,
+                                            Color.White.copy(alpha = 0.95f) else iconButtonColor,
                                     ),
                                     modifier = Modifier
                                         .size(42.dp)
@@ -936,10 +936,10 @@ fun BottomSheetPlayer(
                                     colors = IconButtonDefaults.filledIconButtonColors(
                                         containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                             playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                            Color.White.copy(alpha = 0.12f) else textButtonColor,
+                                            Color.White.copy(alpha = 0.25f) else textButtonColor,
                                         contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                             playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                            Color.White else iconButtonColor,
+                                            Color.White.copy(alpha = 0.95f) else iconButtonColor,
                                     ),
                                     modifier = Modifier
                                         .size(42.dp)
@@ -967,12 +967,12 @@ fun BottomSheetPlayer(
                                     colors = IconButtonDefaults.filledIconButtonColors(
                                         containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                             playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                            Color.White.copy(alpha = 0.12f) else textButtonColor,
+                                            Color.White.copy(alpha = 0.25f) else textButtonColor,
                                         contentColor = if (currentSong?.song?.liked == true)
                                             MaterialTheme.colorScheme.error
                                         else if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                             playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                            Color.White else iconButtonColor,
+                                            Color.White.copy(alpha = 0.95f) else iconButtonColor,
                                     ),
                                     modifier = Modifier
                                         .size(42.dp)
@@ -1260,10 +1260,10 @@ fun BottomSheetPlayer(
                                 colors = IconButtonDefaults.filledIconButtonColors(
                                     containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                         playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                        Color.White.copy(alpha = 0.15f) else sideButtonContainerColor,
+                                        Color.White.copy(alpha = 0.25f) else sideButtonContainerColor,
                                     contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                         playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                        Color.White else sideButtonContentColor,
+                                        Color.White.copy(alpha = 0.95f) else sideButtonContentColor,
                                 ),
                                 modifier = Modifier
                                     .height(68.dp)
@@ -1278,7 +1278,7 @@ fun BottomSheetPlayer(
                                                     brush = Brush.linearGradient(
                                                         colors = listOf(
                                                             Color.White.copy(alpha = 0.35f),
-                                                            Color.White.copy(alpha = 0.15f),
+                                                            Color.White.copy(alpha = 0.25f),
                                                             Color.Transparent,
                                                             Color.White.copy(alpha = 0.15f)
                                                         )
@@ -1320,7 +1320,7 @@ fun BottomSheetPlayer(
                                         Color.White.copy(alpha = 0.22f) else textButtonColor,
                                     contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                         playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                        Color.White else iconButtonColor,
+                                        Color.White.copy(alpha = 0.95f) else iconButtonColor,
                                 ),
                                 modifier = Modifier
                                     .height(68.dp)
@@ -1377,10 +1377,10 @@ fun BottomSheetPlayer(
                                 colors = IconButtonDefaults.filledIconButtonColors(
                                     containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                         playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                        Color.White.copy(alpha = 0.15f) else sideButtonContainerColor,
+                                        Color.White.copy(alpha = 0.25f) else sideButtonContainerColor,
                                     contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
                                         playerBackground == PlayerBackgroundStyle.GRADIENT)
-                                        Color.White else sideButtonContentColor,
+                                        Color.White.copy(alpha = 0.95f) else sideButtonContentColor,
                                 ),
                                 modifier = Modifier
                                     .height(68.dp)
@@ -1395,7 +1395,7 @@ fun BottomSheetPlayer(
                                                     brush = Brush.linearGradient(
                                                         colors = listOf(
                                                             Color.White.copy(alpha = 0.35f),
-                                                            Color.White.copy(alpha = 0.15f),
+                                                            Color.White.copy(alpha = 0.25f),
                                                             Color.Transparent,
                                                             Color.White.copy(alpha = 0.15f)
                                                         )

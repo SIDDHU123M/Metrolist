@@ -62,7 +62,7 @@ fun GlassIconButton(
     size: Dp = 48.dp,
     iconSize: Dp = 24.dp,
     level: GlassLevel = GlassLevel.MEDIUM,
-    tint: Color = Color.White.copy(alpha = 0.15f),
+    tint: Color = Color.White.copy(alpha = 0.25f),
     iconTint: Color = Color.White,
     glowColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
     showGlow: Boolean = false
@@ -106,13 +106,13 @@ fun GlassIconButton(
             .clip(CircleShape)
             .background(tint)
             .border(
-                width = 0.5.dp,
+                width = 1.dp,
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Color.White.copy(alpha = 0.3f),
-                        Color.White.copy(alpha = 0.1f),
+                        Color.White.copy(alpha = 0.4f),
+                        Color.White.copy(alpha = 0.2f),
                         Color.Transparent,
-                        Color.White.copy(alpha = 0.1f)
+                        Color.White.copy(alpha = 0.2f)
                     )
                 ),
                 shape = CircleShape
@@ -223,7 +223,7 @@ fun GlassTextContainer(
     fontSize: Int = 20,
     fontWeight: FontWeight = FontWeight.Bold,
     textColor: Color = Color.White,
-    tint: Color = Color.White.copy(alpha = 0.08f)
+    tint: Color = Color.White.copy(alpha = 0.20f)
 ) {
     Box(
         modifier = modifier
@@ -231,8 +231,8 @@ fun GlassTextContainer(
             .clip(RoundedCornerShape(16.dp))
             .background(tint)
             .border(
-                width = 0.5.dp,
-                color = Color.White.copy(alpha = 0.15f),
+                width = 1.dp,
+                color = Color.White.copy(alpha = 0.35f),
                 shape = RoundedCornerShape(16.dp)
             )
             .then(
