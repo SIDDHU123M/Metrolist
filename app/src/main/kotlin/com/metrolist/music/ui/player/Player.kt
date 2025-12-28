@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.view.WindowCompat
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
@@ -30,6 +31,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -591,68 +593,17 @@ fun BottomSheetPlayer(
             ) {
                 when (playerBackground) {
                     PlayerBackgroundStyle.BLUR -> {
-                        AnimatedContent(
-                            targetState = mediaMetadata?.thumbnailUrl,
-                            transitionSpec = {
-                                fadeIn(tween(800)).togetherWith(fadeOut(tween(800)))
-                            },
-                            label = "blurBackground"
-                        ) { thumbnailUrl ->
-                            if (thumbnailUrl != null) {
-                                Box(modifier = Modifier.alpha(backgroundAlpha)) {
-                                    AsyncImage(
-                                        model = ImageRequest.Builder(context)
-                                            .data(thumbnailUrl)
-                                            .size(100, 100)
-                                            .allowHardware(false)
-                                            .build(),
-                                        contentDescription = null,
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            // Reduced blur for subtler effect
-                                            .blur(if (useDarkTheme) 50.dp else 30.dp)
-                                    )
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .background(Color.Black.copy(alpha = 0.12f))
-                                    )
-                                }
-                            }
-                        }
+                        GlassPlayerBlurBackground(
+                            thumbnailUrl = mediaMetadata?.thumbnailUrl,
+                            alpha = backgroundAlpha
+                        )
                     }
                     PlayerBackgroundStyle.GRADIENT -> {
-                        AnimatedContent(
-                            targetState = gradientColors,
-                            transitionSpec = {
-                                fadeIn(tween(800)).togetherWith(fadeOut(tween(800)))
-                            },
-                            label = "gradientBackground"
-                        ) { colors ->
-                            if (colors.isNotEmpty()) {
-                                val gradientColorStops = if (colors.size >= 3) {
-                                    arrayOf(
-                                        0.0f to colors[0],
-                                        0.5f to colors[1],
-                                        1.0f to colors[2]
-                                    )
-                                } else {
-                                    arrayOf(
-                                        0.0f to colors[0],
-                                        0.6f to colors[0].copy(alpha = 0.7f),
-                                        1.0f to Color.Black
-                                    )
-                                }
-                                Box(
-                                    Modifier
-                                        .fillMaxSize()
-                                        .alpha(backgroundAlpha)
-                                        .background(Brush.verticalGradient(colorStops = gradientColorStops))
-                                        .background(Color.Black.copy(alpha = 0.1f))
-                                )
-                            }
-                        }
+                        GlassPlayerGradientBackground(
+                            thumbnailUrl = mediaMetadata?.thumbnailUrl,
+                            gradientColors = gradientColors,
+                            alpha = backgroundAlpha
+                        )
                     }
                     else -> {
                         PlayerBackgroundStyle.DEFAULT
@@ -740,7 +691,22 @@ fun BottomSheetPlayer(
                     }
                 }
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .then(
+                            if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                playerBackground == PlayerBackgroundStyle.GRADIENT) {
+                                Modifier
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .background(Color.White.copy(alpha = 0.08f))
+                                    .border(
+                                        width = 0.5.dp,
+                                        color = Color.White.copy(alpha = 0.15f),
+                                        shape = RoundedCornerShape(20.dp)
+                                    )
+                                    .padding(16.dp)
+                            } else Modifier
+                        )
                 ) {
                     AnimatedContent(
                         targetState = mediaMetadata.title,
@@ -786,7 +752,7 @@ fun BottomSheetPlayer(
                             mediaMetadata.artists.forEachIndexed { index, artist ->
                                 val tag = "artist_${artist.id.orEmpty()}"
                                 pushStringAnnotation(tag = tag, annotation = artist.id.orEmpty())
-                                withStyle(SpanStyle(color = TextBackgroundColor, fontSize = 16.sp)) {
+                                withStyle(SpanStyle(color = TextBackgroundColor.copy(alpha = 0.85f), fontSize = 16.sp)) {
                                     append(artist.name)
                                 }
                                 pop()
@@ -882,10 +848,25 @@ fun BottomSheetPlayer(
                                     onClick = { isFullScreen = !isFullScreen },
                                     shape = shareShape,
                                     colors = IconButtonDefaults.filledIconButtonColors(
-                                        containerColor = textButtonColor,
-                                        contentColor = iconButtonColor,
+                                        containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                            Color.White.copy(alpha = 0.12f) else textButtonColor,
+                                        contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                            Color.White else iconButtonColor,
                                     ),
-                                    modifier = Modifier.size(42.dp),
+                                    modifier = Modifier
+                                        .size(42.dp)
+                                        .then(
+                                            if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                                playerBackground == PlayerBackgroundStyle.GRADIENT) {
+                                                Modifier.border(
+                                                    width = 0.5.dp,
+                                                    color = Color.White.copy(alpha = 0.2f),
+                                                    shape = shareShape
+                                                )
+                                            } else Modifier
+                                        ),
                                 ) {
                                     Icon(
                                         painter = painterResource(R.drawable.fullscreen),
@@ -908,10 +889,25 @@ fun BottomSheetPlayer(
                                     },
                                     shape = shareShape,
                                     colors = IconButtonDefaults.filledIconButtonColors(
-                                        containerColor = textButtonColor,
-                                        contentColor = iconButtonColor,
+                                        containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                            Color.White.copy(alpha = 0.12f) else textButtonColor,
+                                        contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                            Color.White else iconButtonColor,
                                     ),
-                                    modifier = Modifier.size(42.dp),
+                                    modifier = Modifier
+                                        .size(42.dp)
+                                        .then(
+                                            if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                                playerBackground == PlayerBackgroundStyle.GRADIENT) {
+                                                Modifier.border(
+                                                    width = 0.5.dp,
+                                                    color = Color.White.copy(alpha = 0.2f),
+                                                    shape = shareShape
+                                                )
+                                            } else Modifier
+                                        ),
                                 ) {
                                     Icon(
                                         painter = painterResource(R.drawable.share),
@@ -938,10 +934,25 @@ fun BottomSheetPlayer(
                                     },
                                     shape = favShape,
                                     colors = IconButtonDefaults.filledIconButtonColors(
-                                        containerColor = textButtonColor,
-                                        contentColor = iconButtonColor,
+                                        containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                            Color.White.copy(alpha = 0.12f) else textButtonColor,
+                                        contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                            Color.White else iconButtonColor,
                                     ),
-                                    modifier = Modifier.size(42.dp),
+                                    modifier = Modifier
+                                        .size(42.dp)
+                                        .then(
+                                            if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                                playerBackground == PlayerBackgroundStyle.GRADIENT) {
+                                                Modifier.border(
+                                                    width = 0.5.dp,
+                                                    color = Color.White.copy(alpha = 0.2f),
+                                                    shape = favShape
+                                                )
+                                            } else Modifier
+                                        ),
                                 ) {
                                     Icon(
                                         painter = painterResource(R.drawable.more_horiz),
@@ -954,10 +965,29 @@ fun BottomSheetPlayer(
                                     onClick = playerConnection::toggleLike,
                                     shape = favShape,
                                     colors = IconButtonDefaults.filledIconButtonColors(
-                                        containerColor = textButtonColor,
-                                        contentColor = iconButtonColor,
+                                        containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                            Color.White.copy(alpha = 0.12f) else textButtonColor,
+                                        contentColor = if (currentSong?.song?.liked == true)
+                                            MaterialTheme.colorScheme.error
+                                        else if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                            Color.White else iconButtonColor,
                                     ),
-                                    modifier = Modifier.size(42.dp),
+                                    modifier = Modifier
+                                        .size(42.dp)
+                                        .then(
+                                            if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                                playerBackground == PlayerBackgroundStyle.GRADIENT) {
+                                                Modifier.border(
+                                                    width = 0.5.dp,
+                                                    color = if (currentSong?.song?.liked == true)
+                                                        MaterialTheme.colorScheme.error.copy(alpha = 0.4f)
+                                                    else Color.White.copy(alpha = 0.2f),
+                                                    shape = favShape
+                                                )
+                                            } else Modifier
+                                        ),
                                 ) {
                                     Icon(
                                         painter = painterResource(
@@ -1160,7 +1190,16 @@ fun BottomSheetPlayer(
                 modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = PlayerHorizontalPadding + 4.dp),
+                    .padding(horizontal = PlayerHorizontalPadding + 4.dp)
+                    .then(
+                        if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                            playerBackground == PlayerBackgroundStyle.GRADIENT) {
+                            Modifier
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(Color.White.copy(alpha = 0.06f))
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
+                        } else Modifier
+                    ),
             ) {
                 Text(
                     text = makeTimeString(sliderPosition ?: position),
@@ -1168,14 +1207,16 @@ fun BottomSheetPlayer(
                     color = TextBackgroundColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Medium
                 )
 
                 Text(
                     text = if (duration != C.TIME_UNSET) makeTimeString(duration) else "",
                     style = MaterialTheme.typography.labelMedium,
-                    color = TextBackgroundColor,
+                    color = TextBackgroundColor.copy(alpha = 0.7f),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Medium
                 )
             }
 
@@ -1217,24 +1258,33 @@ fun BottomSheetPlayer(
                                 shape = RoundedCornerShape(50),
                                 interactionSource = backInteractionSource,
                                 colors = IconButtonDefaults.filledIconButtonColors(
-                                    containerColor = sideButtonContainerColor,
-                                    contentColor = sideButtonContentColor,
+                                    containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                        playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                        Color.White.copy(alpha = 0.15f) else sideButtonContainerColor,
+                                    contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                        playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                        Color.White else sideButtonContentColor,
                                 ),
                                 modifier = Modifier
                                     .height(68.dp)
                                     .weight(sideButtonWeight)
                                     .bouncy(backInteractionSource)
                                     .then(
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                                            (playerBackground == PlayerBackgroundStyle.BLUR ||
-                                             playerBackground == PlayerBackgroundStyle.GRADIENT)) {
-                                            Modifier.glassEffect(
-                                                level = GlassLevel.MEDIUM,
-                                                cornerRadius = 50.dp,
-                                                tint = sideButtonContainerColor.copy(alpha = 0.3f),
-                                                borderColor = Color.White.copy(alpha = 0.25f),
-                                                blurRadius = 20f
-                                            )
+                                        if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT) {
+                                            Modifier
+                                                .border(
+                                                    width = 1.dp,
+                                                    brush = Brush.linearGradient(
+                                                        colors = listOf(
+                                                            Color.White.copy(alpha = 0.35f),
+                                                            Color.White.copy(alpha = 0.15f),
+                                                            Color.Transparent,
+                                                            Color.White.copy(alpha = 0.15f)
+                                                        )
+                                                    ),
+                                                    shape = RoundedCornerShape(50)
+                                                )
                                         } else Modifier
                                     )
                             ) {
@@ -1265,26 +1315,47 @@ fun BottomSheetPlayer(
                                 shape = RoundedCornerShape(50),
                                 interactionSource = playPauseInteractionSource,
                                 colors = IconButtonDefaults.filledIconButtonColors(
-                                    containerColor = textButtonColor,
-                                    contentColor = iconButtonColor,
+                                    containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                        playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                        Color.White.copy(alpha = 0.22f) else textButtonColor,
+                                    contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                        playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                        Color.White else iconButtonColor,
                                 ),
                                 modifier = Modifier
                                     .height(68.dp)
                                     .weight(playPauseWeight)
-                                    .then(
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                            Modifier
-                                                .glassEffect(
-                                                    level = GlassLevel.STRONG,
-                                                    cornerRadius = 50.dp,
-                                                    tint = textButtonColor.copy(alpha = 0.2f),
-                                                    borderColor = Color.White.copy(alpha = 0.4f),
-                                                    blurRadius = 25f
+                                    .drawWithContent {
+                                        if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT) {
+                                            drawCircle(
+                                                brush = Brush.radialGradient(
+                                                    colors = listOf(
+                                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
+                                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                                                        Color.Transparent
+                                                    ),
+                                                    radius = size.minDimension * 0.8f
                                                 )
-                                                .glassGlow(
-                                                    glowColor = textButtonColor,
-                                                    intensity = 0.7f,
-                                                    cornerRadius = 50.dp
+                                            )
+                                        }
+                                        drawContent()
+                                    }
+                                    .then(
+                                        if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT) {
+                                            Modifier
+                                                .border(
+                                                    width = 1.dp,
+                                                    brush = Brush.linearGradient(
+                                                        colors = listOf(
+                                                            Color.White.copy(alpha = 0.45f),
+                                                            Color.White.copy(alpha = 0.25f),
+                                                            Color.Transparent,
+                                                            Color.White.copy(alpha = 0.25f)
+                                                        )
+                                                    ),
+                                                    shape = RoundedCornerShape(50)
                                                 )
                                         } else Modifier
                                     )
@@ -1303,7 +1374,8 @@ fun BottomSheetPlayer(
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
                                         text = if (effectiveIsPlaying) "Pause" else stringResource(R.string.play),
-                                        style = MaterialTheme.typography.titleMedium
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.SemiBold
                                     )
                                 }
                             }
@@ -1316,24 +1388,33 @@ fun BottomSheetPlayer(
                                 shape = RoundedCornerShape(50),
                                 interactionSource = nextInteractionSource,
                                 colors = IconButtonDefaults.filledIconButtonColors(
-                                    containerColor = sideButtonContainerColor,
-                                    contentColor = sideButtonContentColor,
+                                    containerColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                        playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                        Color.White.copy(alpha = 0.15f) else sideButtonContainerColor,
+                                    contentColor = if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                        playerBackground == PlayerBackgroundStyle.GRADIENT)
+                                        Color.White else sideButtonContentColor,
                                 ),
                                 modifier = Modifier
                                     .height(68.dp)
                                     .weight(sideButtonWeight)
                                     .bouncy(nextInteractionSource)
                                     .then(
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                                            (playerBackground == PlayerBackgroundStyle.BLUR ||
-                                             playerBackground == PlayerBackgroundStyle.GRADIENT)) {
-                                            Modifier.glassEffect(
-                                                level = GlassLevel.MEDIUM,
-                                                cornerRadius = 50.dp,
-                                                tint = sideButtonContainerColor.copy(alpha = 0.3f),
-                                                borderColor = Color.White.copy(alpha = 0.25f),
-                                                blurRadius = 20f
-                                            )
+                                        if (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                            playerBackground == PlayerBackgroundStyle.GRADIENT) {
+                                            Modifier
+                                                .border(
+                                                    width = 1.dp,
+                                                    brush = Brush.linearGradient(
+                                                        colors = listOf(
+                                                            Color.White.copy(alpha = 0.35f),
+                                                            Color.White.copy(alpha = 0.15f),
+                                                            Color.Transparent,
+                                                            Color.White.copy(alpha = 0.15f)
+                                                        )
+                                                    ),
+                                                    shape = RoundedCornerShape(50)
+                                                )
                                         } else Modifier
                                     )
                             ) {
