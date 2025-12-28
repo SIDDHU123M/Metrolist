@@ -120,9 +120,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.media3.common.C
 import android.os.Build
-import com.metrolist.music.ui.utils.GlassLevel
-import com.metrolist.music.ui.utils.glassEffect
-import com.metrolist.music.ui.utils.glassGlow
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.Player.STATE_READY
@@ -591,23 +588,11 @@ fun BottomSheetPlayer(
                     .fillMaxSize()
                     .background(bottomSheetBackgroundColor)
             ) {
-                when (playerBackground) {
-                    PlayerBackgroundStyle.BLUR -> {
-                        GlassPlayerBlurBackground(
-                            thumbnailUrl = mediaMetadata?.thumbnailUrl,
-                            alpha = backgroundAlpha
-                        )
-                    }
-                    PlayerBackgroundStyle.GRADIENT -> {
-                        GlassPlayerGradientBackground(
-                            thumbnailUrl = mediaMetadata?.thumbnailUrl,
-                            gradientColors = gradientColors,
-                            alpha = backgroundAlpha
-                        )
-                    }
-                    else -> {
-                        PlayerBackgroundStyle.DEFAULT
-                    }
+                if (playerBackground == PlayerBackgroundStyle.GRADIENT && gradientColors.isNotEmpty()) {
+                    PlayerBackground(
+                        gradientColors = gradientColors,
+                        alpha = backgroundAlpha
+                    )
                 }
             }
         },
@@ -637,21 +622,7 @@ fun BottomSheetPlayer(
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = PlayerHorizontalPadding)
-                    .then(
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                            (playerBackground == PlayerBackgroundStyle.BLUR ||
-                             playerBackground == PlayerBackgroundStyle.GRADIENT)) {
-                            Modifier
-                                .glassEffect(
-                                    level = GlassLevel.STRONG,
-                                    cornerRadius = 24.dp,
-                                    tint = Color.Black.copy(alpha = 0.25f),
-                                    borderColor = Color.White.copy(alpha = 0.3f),
-                                    blurRadius = 20f
-                                )
-                                .padding(horizontal = 20.dp, vertical = 16.dp)
-                        } else Modifier
-                    ),
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
             ) {
                 AnimatedContent(
                     targetState = showInlineLyrics,
@@ -1460,15 +1431,6 @@ fun BottomSheetPlayer(
                                     .size(72.dp)
                                     .clip(RoundedCornerShape(playPauseRoundness))
                                     .background(textButtonColor)
-                                    .then(
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                            Modifier.glassGlow(
-                                                glowColor = textButtonColor,
-                                                intensity = 0.4f,
-                                                cornerRadius = playPauseRoundness
-                                            )
-                                        } else Modifier
-                                    )
                                     .clickable {
                                         if (isCasting) {
                                             if (castIsPlaying) {
@@ -1696,17 +1658,7 @@ fun InlineLyricsView(mediaMetadata: MediaMetadata?, showLyrics: Boolean) {
         modifier = Modifier
             .fillMaxSize()
             .clip(RoundedCornerShape(16.dp))
-            .then(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    Modifier.glassEffect(
-                        level = GlassLevel.MEDIUM,
-                        cornerRadius = 16.dp,
-                        tint = Color.Black.copy(alpha = 0.3f),
-                        borderColor = Color.White.copy(alpha = 0.2f),
-                        blurRadius = 30f
-                    )
-                } else Modifier
-            ),
+            .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.9f)),
         contentAlignment = Alignment.Center
     ) {
         when {

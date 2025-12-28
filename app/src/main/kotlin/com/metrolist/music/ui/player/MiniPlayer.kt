@@ -80,7 +80,6 @@ import com.metrolist.music.LocalDatabase
 import com.metrolist.music.LocalPlayerConnection
 import com.metrolist.music.R
 import android.os.Build
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.platform.LocalContext
 import com.metrolist.music.constants.MiniPlayerHeight
 import com.metrolist.music.constants.MiniPlayerOutlineKey
@@ -99,10 +98,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import com.metrolist.music.constants.DarkModeKey
 import com.metrolist.music.ui.screens.settings.DarkMode
 import com.metrolist.music.utils.rememberEnumPreference
-import com.metrolist.music.ui.utils.GlassLevel
-import com.metrolist.music.ui.utils.glassEffect
-import com.metrolist.music.ui.utils.glassGlow
-import android.os.Build
 
 @Composable
 fun MiniPlayer(
@@ -488,30 +483,11 @@ private fun NewMiniPlayer(
                             modifier = Modifier
                                 .size(40.dp)
                                 .clip(CircleShape)
-                                .then(
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isSubscribed) {
-                                        Modifier.glassEffect(
-                                            level = GlassLevel.SUBTLE,
-                                            cornerRadius = 20.dp,
-                                            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                                            borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                                            blurRadius = 10f
-                                        )
-                                    } else Modifier
-                                )
-                                .border(
-                                    width = if (isSubscribed) 1.5.dp else 1.dp,
-                                    color = if (isSubscribed)
-                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
-                                    else
-                                        MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                                    shape = CircleShape
-                                )
                                 .background(
                                     color = if (isSubscribed)
-                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                                        MaterialTheme.colorScheme.primaryContainer
                                     else
-                                        Color.Transparent,
+                                        MaterialTheme.colorScheme.surfaceContainerHighest,
                                     shape = CircleShape
                                 )
                                 .clickable {
@@ -561,30 +537,11 @@ private fun NewMiniPlayer(
                         modifier = Modifier
                             .size(40.dp)
                             .clip(CircleShape)
-                            .then(
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isLiked) {
-                                    Modifier.glassEffect(
-                                        level = GlassLevel.SUBTLE,
-                                        cornerRadius = 20.dp,
-                                        tint = MaterialTheme.colorScheme.error.copy(alpha = 0.2f),
-                                        borderColor = MaterialTheme.colorScheme.error.copy(alpha = 0.5f),
-                                        blurRadius = 10f
-                                    )
-                                } else Modifier
-                            )
-                            .border(
-                                width = if (isLiked) 1.5.dp else 1.dp,
-                                color = if (isLiked)
-                                    MaterialTheme.colorScheme.error.copy(alpha = 0.6f)
-                                else
-                                    MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                                shape = CircleShape
-                            )
                             .background(
                                 color = if (isLiked)
-                                    MaterialTheme.colorScheme.error.copy(alpha = 0.15f)
+                                    MaterialTheme.colorScheme.errorContainer
                                 else
-                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.surfaceContainerHighest,
                                 shape = CircleShape
                             )
                             .clickable {

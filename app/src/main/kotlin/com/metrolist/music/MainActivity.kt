@@ -112,9 +112,6 @@ import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
-import com.metrolist.music.ui.utils.GlassLevel
-import com.metrolist.music.ui.utils.glassEffect
-import androidx.compose.ui.draw.blur
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -820,21 +817,8 @@ class MainActivity : ComponentActivity() {
                                                             y = (slideOffset + hideOffset).roundToPx(),
                                                         )
                                                     }
-                                                }
-                                                .then(
-                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                                        Modifier.glassEffect(
-                                                            level = GlassLevel.MEDIUM,
-                                                            cornerRadius = 0.dp,
-                                                            tint = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f),
-                                                            borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                                                            blurRadius = 20f
-                                                        )
-                                                    } else Modifier
-                                                ),
-                                            containerColor = if (pureBlack) Color.Black else MaterialTheme.colorScheme.surfaceContainer.copy(
-                                                alpha = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) 0.7f else 1f
-                                            ),
+                                                },
+                                            containerColor = if (pureBlack) Color.Black else MaterialTheme.colorScheme.surfaceContainer,
                                             contentColor = if (pureBlack) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                                         ) {
                                             navigationItems.fastForEach { screen ->
@@ -911,18 +895,7 @@ class MainActivity : ComponentActivity() {
                             Row(Modifier.fillMaxSize()) {
                                 if (showRail) {
                                     NavigationRail(
-                                        modifier = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                            Modifier.glassEffect(
-                                                level = GlassLevel.MEDIUM,
-                                                cornerRadius = 0.dp,
-                                                tint = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f),
-                                                borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                                                blurRadius = 20f
-                                            )
-                                        } else Modifier,
-                                        containerColor = if (pureBlack) Color.Black else MaterialTheme.colorScheme.surfaceContainer.copy(
-                                            alpha = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) 0.7f else 1f
-                                        )
+                                        containerColor = if (pureBlack) Color.Black else MaterialTheme.colorScheme.surfaceContainer
                                     ) {
                                         Spacer(modifier = Modifier.weight(1f))
 

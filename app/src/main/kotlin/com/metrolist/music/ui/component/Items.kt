@@ -82,9 +82,6 @@ import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.zIndex
 import androidx.core.graphics.drawable.toBitmapOrNull
 import android.os.Build
-import com.metrolist.music.ui.utils.GlassLevel
-import com.metrolist.music.ui.utils.glassEffect
-import com.metrolist.music.ui.utils.glassGlow
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
@@ -150,20 +147,9 @@ inline fun ListItem(
             .padding(horizontal = 8.dp)
             .then(
                 if (isActive) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .glassEffect(
-                                level = GlassLevel.SUBTLE,
-                                cornerRadius = 12.dp,
-                                tint = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
-                                borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                                blurRadius = 15f
-                            )
-                            .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f))
-                    } else {
-                        Modifier.clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.secondaryContainer)
-                    }
+                    Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
                 } else Modifier
             )
     ) {

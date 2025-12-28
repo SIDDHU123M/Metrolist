@@ -74,10 +74,6 @@ import androidx.navigation.NavController
 import android.os.Build
 import com.metrolist.music.R
 import com.metrolist.music.ui.screens.settings.AccountSettings
-import com.metrolist.music.ui.utils.GlassLevel
-import com.metrolist.music.ui.utils.glassEffect
-import com.metrolist.music.ui.utils.glassGlow
-import androidx.compose.ui.draw.blur
 import kotlinx.coroutines.delay
 
 @Composable
