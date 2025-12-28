@@ -302,66 +302,19 @@ private fun NewMiniPlayer(
                 .offset { IntOffset(offsetXAnimatable.value.roundToInt(), 0) }
                 .clip(RoundedCornerShape(32.dp))
         ) {
-            // Background: Blurred album art
-            mediaMetadata?.let { metadata ->
-                AsyncImage(
-                    model = ImageRequest.Builder(context)
-                        .data(metadata.thumbnailUrl)
-                        .size(200, 200)
-                        .build(),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .blur(60.dp)
-                )
-
-                // Dark overlay for contrast
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Black.copy(alpha = if (pureBlack && useDarkTheme) 0.7f else 0.6f))
-                )
-            }
-
-            // Glass effect layer on top
+            // Clean solid background with elevation
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .then(
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                            Modifier.glassEffect(
-                                level = GlassLevel.STRONG,
-                                cornerRadius = 32.dp,
-                                tint = if (pureBlack && useDarkTheme)
-                                    Color.Black.copy(alpha = 0.4f)
-                                else
-                                    MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.5f),
-                                borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
-                                blurRadius = 20f
-                            ).glassGlow(
-                                glowColor = MaterialTheme.colorScheme.primary,
-                                intensity = 0.5f,
-                                cornerRadius = 32.dp
-                            )
-                        } else {
-                            Modifier
-                                .background(
-                                    color = if (pureBlack && useDarkTheme)
-                                        Color.Black.copy(alpha = 0.8f)
-                                    else
-                                        MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.9f)
-                                )
-                                .border(
-                                    width = 1.5.dp,
-                                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
-                                    shape = RoundedCornerShape(32.dp)
-                                )
-                        }
+                    .background(
+                        if (pureBlack && useDarkTheme)
+                            Color.Black
+                        else
+                            MaterialTheme.colorScheme.surfaceContainerHigh
                     )
             )
 
-            // Content on top of glass
+            // Content
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -377,20 +330,10 @@ private fun NewMiniPlayer(
                     if (duration > 0) {
                         CircularProgressIndicator(
                             progress = { (position.toFloat() / duration).coerceIn(0f, 1f) },
-                            modifier = Modifier
-                                .size(48.dp)
-                                .then(
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                        Modifier.glassGlow(
-                                            glowColor = MaterialTheme.colorScheme.primary,
-                                            intensity = 0.4f,
-                                            cornerRadius = 24.dp
-                                        )
-                                    } else Modifier
-                                ),
+                            modifier = Modifier.size(48.dp),
                             color = MaterialTheme.colorScheme.primary,
                             strokeWidth = 3.dp,
-                            trackColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                            trackColor = MaterialTheme.colorScheme.surfaceContainerHighest
                         )
                     }
 

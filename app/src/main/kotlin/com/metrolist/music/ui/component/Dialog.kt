@@ -101,34 +101,10 @@ fun DefaultDialog(
             contentAlignment = Alignment.Center
         ) {
             Surface(
-                modifier = Modifier
-                    .padding(24.dp)
-                    .then(
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                            Modifier
-                                .glassEffect(
-                                    level = GlassLevel.MEDIUM,
-                                    cornerRadius = 28.dp,
-                                    tint = AlertDialogDefaults.containerColor.copy(alpha = 0.15f),
-                                    borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                                    blurRadius = 5f
-                                )
-                                .glassGlow(
-                                    glowColor = MaterialTheme.colorScheme.primary,
-                                    intensity = 0.2f,
-                                    cornerRadius = 28.dp
-                                )
-                        } else Modifier
-                    ),
+                modifier = Modifier.padding(24.dp),
                 shape = RoundedCornerShape(28.dp),
-                color = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                    AlertDialogDefaults.containerColor.copy(alpha = 0.95f)
-                else
-                    AlertDialogDefaults.containerColor,
-                tonalElevation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                    2.dp
-                else
-                    AlertDialogDefaults.TonalElevation
+                color = AlertDialogDefaults.containerColor,
+                tonalElevation = AlertDialogDefaults.TonalElevation
             ) {
             Column(
                 horizontalAlignment = horizontalAlignment,

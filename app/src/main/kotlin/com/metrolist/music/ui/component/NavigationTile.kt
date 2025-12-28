@@ -47,29 +47,13 @@ fun NavigationTile(
             Modifier
                 .size(56.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.secondaryContainer)
-                .then(
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        Modifier
-                            .glassEffect(
-                                level = GlassLevel.MEDIUM,
-                                cornerRadius = 28.dp,
-                                tint = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
-                                borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
-                                blurRadius = 12f
-                            )
-                            .glassGlow(
-                                glowColor = MaterialTheme.colorScheme.primary,
-                                intensity = 0.12f,
-                                cornerRadius = 28.dp
-                            )
-                    } else Modifier
-                )
+                .background(MaterialTheme.colorScheme.primaryContainer)
                 .clickable(onClick = onClick),
         ) {
             Icon(
                 painter = painterResource(icon),
                 contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
 

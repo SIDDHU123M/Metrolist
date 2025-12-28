@@ -232,24 +232,7 @@ fun GridItem(
             }
                 .aspectRatio(thumbnailRatio)
                 .clip(RoundedCornerShape(ThumbnailCornerRadius))
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-                .then(
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        Modifier
-                            .glassEffect(
-                                level = GlassLevel.MEDIUM,
-                                cornerRadius = ThumbnailCornerRadius,
-                                tint = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
-                                borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                                blurRadius = 15f
-                            )
-                            .glassGlow(
-                                glowColor = MaterialTheme.colorScheme.primary,
-                                intensity = 0.15f,
-                                cornerRadius = ThumbnailCornerRadius
-                            )
-                    } else Modifier.background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
-                )
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
         ) {
             thumbnailContent()
         }
