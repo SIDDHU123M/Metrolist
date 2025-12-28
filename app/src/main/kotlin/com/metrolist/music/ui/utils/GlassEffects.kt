@@ -40,35 +40,20 @@ fun Modifier.glassEffect(
     borderColor: Color = Color.White.copy(alpha = 0.2f),
     tint: Color = Color.White.copy(alpha = 0.1f),
     blurRadius: Float = when (level) {
-        GlassLevel.SUBTLE -> 15f
-        GlassLevel.MEDIUM -> 25f
-        GlassLevel.STRONG -> 40f
-        GlassLevel.ULTRA -> 60f
+        GlassLevel.SUBTLE -> 2f
+        GlassLevel.MEDIUM -> 4f
+        GlassLevel.STRONG -> 6f
+        GlassLevel.ULTRA -> 8f
     },
     animated: Boolean = false
 ) = composed {
     val shape = RoundedCornerShape(cornerRadius)
 
-    val animatedBlur by animateFloatAsState(
-        targetValue = blurRadius,
-        animationSpec = tween(300),
-        label = "glass_blur"
-    )
-
-    val actualBlur = if (animated) animatedBlur else blurRadius
-
+    // DO NOT apply blur to content - only use semi-transparent backgrounds
     this
         .clip(shape)
-        .then(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                Modifier.graphicsLayer {
-                    renderEffect = createBlurEffect(actualBlur)
-                }
-            } else Modifier
-        )
         .background(tint, shape)
-        .border(1.dp, borderColor, shape)
-        .glassOverlay(level)
+        .border(0.5.dp, borderColor, shape)
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -78,10 +63,10 @@ private fun createBlurEffect(radius: Float) = RenderEffect
 
 fun Modifier.glassOverlay(level: GlassLevel = GlassLevel.MEDIUM) = composed {
     val overlayAlpha = when (level) {
-        GlassLevel.SUBTLE -> 0.08f
-        GlassLevel.MEDIUM -> 0.15f
-        GlassLevel.STRONG -> 0.25f
-        GlassLevel.ULTRA -> 0.35f
+        GlassLevel.SUBTLE -> 0.02f
+        GlassLevel.MEDIUM -> 0.04f
+        GlassLevel.STRONG -> 0.06f
+        GlassLevel.ULTRA -> 0.08f
     }
 
     this.drawWithContent {
@@ -90,11 +75,11 @@ fun Modifier.glassOverlay(level: GlassLevel = GlassLevel.MEDIUM) = composed {
             brush = Brush.radialGradient(
                 colors = listOf(
                     Color.White.copy(alpha = overlayAlpha),
-                    Color.White.copy(alpha = overlayAlpha * 0.5f),
+                    Color.White.copy(alpha = overlayAlpha * 0.3f),
                     Color.Transparent
                 ),
                 center = Offset(size.width * 0.3f, size.height * 0.2f),
-                radius = size.maxDimension * 0.8f
+                radius = size.maxDimension * 1.2f
             )
         )
     }
@@ -118,20 +103,20 @@ fun Modifier.glassElevation(
 
 fun Modifier.glassGlow(
     glowColor: Color = Color.White,
-    intensity: Float = 0.3f,
+    intensity: Float = 0.2f,
     cornerRadius: Dp = 16.dp
 ) = composed {
     val shape = RoundedCornerShape(cornerRadius)
 
     this.border(
-        width = 1.5.dp,
+        width = 0.5.dp,
         brush = Brush.linearGradient(
             colors = listOf(
-                glowColor.copy(alpha = intensity),
-                glowColor.copy(alpha = intensity * 0.5f),
+                glowColor.copy(alpha = intensity * 0.6f),
+                glowColor.copy(alpha = intensity * 0.4f),
                 glowColor.copy(alpha = intensity * 0.2f),
-                glowColor.copy(alpha = intensity * 0.5f),
-                glowColor.copy(alpha = intensity)
+                glowColor.copy(alpha = intensity * 0.4f),
+                glowColor.copy(alpha = intensity * 0.6f)
             )
         ),
         shape = shape
@@ -139,8 +124,8 @@ fun Modifier.glassGlow(
 }
 
 fun Modifier.shimmerGlass(
-    baseColor: Color = Color.White.copy(alpha = 0.1f),
-    highlightColor: Color = Color.White.copy(alpha = 0.3f)
+    baseColor: Color = Color.White.copy(alpha = 0.03f),
+    highlightColor: Color = Color.White.copy(alpha = 0.08f)
 ) = composed {
     this.background(
         brush = Brush.linearGradient(

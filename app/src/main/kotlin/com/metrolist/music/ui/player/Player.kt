@@ -610,12 +610,13 @@ fun BottomSheetPlayer(
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier
                                             .fillMaxSize()
-                                            .blur(if (useDarkTheme) 150.dp else 100.dp)
+                                            // Reduced blur for subtler effect
+                                            .blur(if (useDarkTheme) 50.dp else 30.dp)
                                     )
                                     Box(
                                         modifier = Modifier
                                             .fillMaxSize()
-                                            .background(Color.Black.copy(alpha = 0.3f))
+                                            .background(Color.Black.copy(alpha = 0.12f))
                                     )
                                 }
                             }
@@ -648,7 +649,7 @@ fun BottomSheetPlayer(
                                         .fillMaxSize()
                                         .alpha(backgroundAlpha)
                                         .background(Brush.verticalGradient(colorStops = gradientColorStops))
-                                        .background(Color.Black.copy(alpha = 0.2f))
+                                        .background(Color.Black.copy(alpha = 0.1f))
                                 )
                             }
                         }
@@ -693,9 +694,9 @@ fun BottomSheetPlayer(
                                 .glassEffect(
                                     level = GlassLevel.MEDIUM,
                                     cornerRadius = 20.dp,
-                                    tint = Color.Black.copy(alpha = 0.3f),
+                                    tint = Color.Black.copy(alpha = 0.12f),
                                     borderColor = Color.White.copy(alpha = 0.2f),
-                                    blurRadius = 25f
+                                    blurRadius = 10f
                                 )
                                 .padding(horizontal = 16.dp, vertical = 12.dp)
                         } else Modifier
@@ -1230,7 +1231,7 @@ fun BottomSheetPlayer(
                                             Modifier.glassEffect(
                                                 level = GlassLevel.SUBTLE,
                                                 cornerRadius = 50.dp,
-                                                tint = sideButtonContainerColor.copy(alpha = 0.4f),
+                                                tint = sideButtonContainerColor.copy(alpha = 0.2f),
                                                 borderColor = Color.White.copy(alpha = 0.15f),
                                                 blurRadius = 15f
                                             )
@@ -1321,7 +1322,7 @@ fun BottomSheetPlayer(
                                             Modifier.glassEffect(
                                                 level = GlassLevel.SUBTLE,
                                                 cornerRadius = 50.dp,
-                                                tint = sideButtonContainerColor.copy(alpha = 0.4f),
+                                                tint = sideButtonContainerColor.copy(alpha = 0.2f),
                                                 borderColor = Color.White.copy(alpha = 0.15f),
                                                 blurRadius = 15f
                                             )

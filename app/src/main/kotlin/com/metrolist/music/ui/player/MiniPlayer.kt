@@ -301,11 +301,11 @@ private fun NewMiniPlayer(
                             level = GlassLevel.MEDIUM,
                             cornerRadius = 32.dp,
                             tint = if (pureBlack && useDarkTheme)
-                                Color.Black.copy(alpha = 0.85f)
+                                Color.Black.copy(alpha = 0.5f)
                             else
                                 MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.8f),
                             borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                            blurRadius = 30f
+                            blurRadius = 10f
                         ).glassGlow(
                             glowColor = MaterialTheme.colorScheme.primary,
                             intensity = 0.3f,

@@ -42,8 +42,8 @@ fun GlassSurface(
     modifier: Modifier = Modifier,
     level: GlassLevel = GlassLevel.MEDIUM,
     cornerRadius: Dp = 16.dp,
-    tint: Color = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f),
-    borderColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+    tint: Color = MaterialTheme.colorScheme.surface.copy(alpha = 0.12f),
+    borderColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
     elevation: Dp = 0.dp,
     content: @Composable BoxScope.() -> Unit
 ) {
@@ -97,8 +97,8 @@ fun GlassCard(
             .glassEffect(
                 level = level,
                 cornerRadius = cornerRadius,
-                tint = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
-                borderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                tint = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.15f),
+                borderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.12f)
             )
     ) {
         content()
@@ -108,18 +108,13 @@ fun GlassCard(
 @Composable
 fun GlassContainer(
     modifier: Modifier = Modifier,
-    blurBackground: Boolean = true,
-    backgroundAlpha: Float = 0.85f,
+    blurBackground: Boolean = false,
+    backgroundAlpha: Float = 0.12f,
     content: @Composable BoxScope.() -> Unit
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .then(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && blurBackground) {
-                    Modifier.blur(25.dp)
-                } else Modifier
-            )
             .background(
                 MaterialTheme.colorScheme.surface.copy(alpha = backgroundAlpha)
             )
@@ -137,20 +132,15 @@ fun GlassDialog(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.6f))
-            .then(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    Modifier.blur(15.dp)
-                } else Modifier
-            ),
+            .background(Color.Black.copy(alpha = 0.4f)),
         contentAlignment = Alignment.Center
     ) {
         GlassCard(
             modifier = modifier,
-            level = GlassLevel.STRONG,
+            level = GlassLevel.MEDIUM,
             cornerRadius = 24.dp,
             showGlow = true,
-            glowColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+            glowColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
             content = content
         )
     }

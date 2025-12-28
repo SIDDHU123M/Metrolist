@@ -97,12 +97,7 @@ fun DefaultDialog(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f))
-                .then(
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        Modifier.blur(20.dp)
-                    } else Modifier
-                ),
+                .background(Color.Black.copy(alpha = 0.3f)),
             contentAlignment = Alignment.Center
         ) {
             Surface(
@@ -112,26 +107,26 @@ fun DefaultDialog(
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                             Modifier
                                 .glassEffect(
-                                    level = GlassLevel.STRONG,
+                                    level = GlassLevel.MEDIUM,
                                     cornerRadius = 28.dp,
-                                    tint = AlertDialogDefaults.containerColor.copy(alpha = 0.85f),
-                                    borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                                    blurRadius = 40f
+                                    tint = AlertDialogDefaults.containerColor.copy(alpha = 0.15f),
+                                    borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                                    blurRadius = 5f
                                 )
                                 .glassGlow(
                                     glowColor = MaterialTheme.colorScheme.primary,
-                                    intensity = 0.4f,
+                                    intensity = 0.2f,
                                     cornerRadius = 28.dp
                                 )
                         } else Modifier
                     ),
                 shape = RoundedCornerShape(28.dp),
                 color = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                    Color.Transparent
+                    AlertDialogDefaults.containerColor.copy(alpha = 0.95f)
                 else
                     AlertDialogDefaults.containerColor,
                 tonalElevation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                    0.dp
+                    2.dp
                 else
                     AlertDialogDefaults.TonalElevation
             ) {
