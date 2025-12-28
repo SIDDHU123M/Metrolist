@@ -74,12 +74,14 @@ fun AmbientBackground(
             .fillMaxSize()
             .background(baseColor)
             .drawWithContent {
+                drawContent()
+
                 if (animated) {
                     drawRect(
                         brush = Brush.radialGradient(
                             colors = listOf(
-                                primaryColor.copy(alpha = 0.25f * animatedScale),
-                                secondaryColor.copy(alpha = 0.15f),
+                                primaryColor.copy(alpha = 0.08f),
+                                secondaryColor.copy(alpha = 0.04f),
                                 Color.Transparent
                             ),
                             center = Offset(
@@ -93,8 +95,8 @@ fun AmbientBackground(
                     drawRect(
                         brush = Brush.radialGradient(
                             colors = listOf(
-                                tertiaryColor.copy(alpha = 0.2f),
-                                secondaryColor.copy(alpha = 0.1f),
+                                tertiaryColor.copy(alpha = 0.06f),
+                                secondaryColor.copy(alpha = 0.03f),
                                 Color.Transparent
                             ),
                             center = Offset(
@@ -108,9 +110,9 @@ fun AmbientBackground(
                     drawRect(
                         brush = Brush.linearGradient(
                             colors = listOf(
-                                Color.White.copy(alpha = 0.03f),
+                                Color.White.copy(alpha = 0.01f),
                                 Color.Transparent,
-                                Color.White.copy(alpha = 0.02f)
+                                Color.White.copy(alpha = 0.005f)
                             ),
                             start = Offset.Zero,
                             end = Offset(size.width, size.height)
@@ -120,8 +122,8 @@ fun AmbientBackground(
                     drawRect(
                         brush = Brush.radialGradient(
                             colors = listOf(
-                                primaryColor.copy(alpha = 0.2f),
-                                secondaryColor.copy(alpha = 0.1f),
+                                primaryColor.copy(alpha = 0.06f),
+                                secondaryColor.copy(alpha = 0.03f),
                                 Color.Transparent
                             ),
                             center = Offset(size.width * 0.3f, size.height * 0.4f),
@@ -129,14 +131,7 @@ fun AmbientBackground(
                         )
                     )
                 }
-
-                drawContent()
             }
-            .then(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    Modifier.blur(80.dp)
-                } else Modifier
-            )
     ) {
         content()
     }
