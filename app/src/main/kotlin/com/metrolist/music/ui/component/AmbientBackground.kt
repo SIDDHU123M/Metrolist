@@ -77,42 +77,62 @@ fun AmbientBackground(
                 drawContent()
 
                 if (animated) {
+                    // Large primary gradient orb
                     drawRect(
                         brush = Brush.radialGradient(
                             colors = listOf(
-                                primaryColor.copy(alpha = 0.08f),
-                                secondaryColor.copy(alpha = 0.04f),
+                                primaryColor.copy(alpha = 0.18f),
+                                primaryColor.copy(alpha = 0.12f),
+                                secondaryColor.copy(alpha = 0.08f),
                                 Color.Transparent
                             ),
                             center = Offset(
-                                size.width * (0.2f + animatedOffset1 * 0.3f),
-                                size.height * (0.3f + animatedOffset2 * 0.2f)
+                                size.width * (0.2f + animatedOffset1 * 0.4f),
+                                size.height * (0.3f + animatedOffset2 * 0.3f)
                             ),
-                            radius = size.maxDimension * (0.8f + animatedScale * 0.2f)
+                            radius = size.maxDimension * (0.7f + animatedScale * 0.3f)
                         )
                     )
 
+                    // Secondary gradient orb
                     drawRect(
                         brush = Brush.radialGradient(
                             colors = listOf(
+                                tertiaryColor.copy(alpha = 0.15f),
+                                secondaryColor.copy(alpha = 0.10f),
+                                Color.Transparent
+                            ),
+                            center = Offset(
+                                size.width * (0.8f - animatedOffset2 * 0.4f),
+                                size.height * (0.7f - animatedOffset1 * 0.3f)
+                            ),
+                            radius = size.maxDimension * (0.5f + (1f - animatedScale) * 0.2f)
+                        )
+                    )
+
+                    // Third accent orb
+                    drawRect(
+                        brush = Brush.radialGradient(
+                            colors = listOf(
+                                secondaryColor.copy(alpha = 0.12f),
                                 tertiaryColor.copy(alpha = 0.06f),
-                                secondaryColor.copy(alpha = 0.03f),
                                 Color.Transparent
                             ),
                             center = Offset(
-                                size.width * (0.8f - animatedOffset2 * 0.3f),
-                                size.height * (0.7f - animatedOffset1 * 0.2f)
+                                size.width * (0.5f + animatedOffset1 * 0.2f),
+                                size.height * (0.1f + animatedOffset2 * 0.2f)
                             ),
-                            radius = size.maxDimension * 0.6f
+                            radius = size.maxDimension * 0.4f
                         )
                     )
 
+                    // Subtle shimmer overlay
                     drawRect(
                         brush = Brush.linearGradient(
                             colors = listOf(
-                                Color.White.copy(alpha = 0.01f),
+                                Color.White.copy(alpha = 0.03f),
                                 Color.Transparent,
-                                Color.White.copy(alpha = 0.005f)
+                                Color.White.copy(alpha = 0.02f)
                             ),
                             start = Offset.Zero,
                             end = Offset(size.width, size.height)
@@ -122,8 +142,8 @@ fun AmbientBackground(
                     drawRect(
                         brush = Brush.radialGradient(
                             colors = listOf(
-                                primaryColor.copy(alpha = 0.06f),
-                                secondaryColor.copy(alpha = 0.03f),
+                                primaryColor.copy(alpha = 0.15f),
+                                secondaryColor.copy(alpha = 0.10f),
                                 Color.Transparent
                             ),
                             center = Offset(size.width * 0.3f, size.height * 0.4f),
