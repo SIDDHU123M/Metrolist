@@ -161,9 +161,9 @@ fun GlassPlayButton(
             }
             .drawWithContent {
                 // Outer glow
-                val centerX = size.width / 2f
-                val centerY = size.height / 2f
-                val minDim = minOf(size.width, size.height)
+                val centerX = this.size.width / 2f
+                val centerY = this.size.height / 2f
+                val minDim = minOf(this.size.width, this.size.height)
                 drawCircle(
                     brush = Brush.radialGradient(
                         colors = listOf(
