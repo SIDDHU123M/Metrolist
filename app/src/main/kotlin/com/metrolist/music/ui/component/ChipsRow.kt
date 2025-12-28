@@ -56,8 +56,6 @@ import androidx.compose.ui.unit.dp
 import android.os.Build
 import com.metrolist.music.R
 import com.metrolist.music.ui.screens.OptionStats
-import com.metrolist.music.ui.utils.GlassLevel
-import com.metrolist.music.ui.utils.glassEffect
 
 @Composable
 fun <E> ChipsRow(
@@ -94,20 +92,12 @@ fun <E> ChipsRow(
                 shape = RoundedCornerShape(16.dp),
                 border = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && currentValue == value) {
                     FilterChipDefaults.filterChipBorder(
-                        borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-                        selectedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-                        borderWidth = 1.dp,
-                        selectedBorderWidth = 1.dp
+                        borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                        selectedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                        borderWidth = 1.5.dp,
+                        selectedBorderWidth = 1.5.dp
                     )
-                } else null,
-                modifier = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && currentValue == value) {
-                    Modifier.glassEffect(
-                        level = GlassLevel.SUBTLE,
-                        cornerRadius = 16.dp,
-                        tint = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
-                        blurRadius = 15f
-                    )
-                } else Modifier
+                } else null
             )
 
             Spacer(Modifier.width(8.dp))

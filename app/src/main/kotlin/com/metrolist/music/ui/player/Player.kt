@@ -117,6 +117,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.media3.common.C
+import android.os.Build
+import com.metrolist.music.ui.utils.GlassLevel
+import com.metrolist.music.ui.utils.glassEffect
+import com.metrolist.music.ui.utils.glassGlow
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.Player.STATE_READY
@@ -680,7 +684,22 @@ fun BottomSheetPlayer(
                 modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = PlayerHorizontalPadding),
+                    .padding(horizontal = PlayerHorizontalPadding)
+                    .then(
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                            (playerBackground == PlayerBackgroundStyle.BLUR ||
+                             playerBackground == PlayerBackgroundStyle.GRADIENT)) {
+                            Modifier
+                                .glassEffect(
+                                    level = GlassLevel.MEDIUM,
+                                    cornerRadius = 20.dp,
+                                    tint = Color.Black.copy(alpha = 0.3f),
+                                    borderColor = Color.White.copy(alpha = 0.2f),
+                                    blurRadius = 25f
+                                )
+                                .padding(horizontal = 16.dp, vertical = 12.dp)
+                        } else Modifier
+                    ),
             ) {
                 AnimatedContent(
                     targetState = showInlineLyrics,
@@ -1204,6 +1223,19 @@ fun BottomSheetPlayer(
                                     .height(68.dp)
                                     .weight(sideButtonWeight)
                                     .bouncy(backInteractionSource)
+                                    .then(
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                                            (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                             playerBackground == PlayerBackgroundStyle.GRADIENT)) {
+                                            Modifier.glassEffect(
+                                                level = GlassLevel.SUBTLE,
+                                                cornerRadius = 50.dp,
+                                                tint = sideButtonContainerColor.copy(alpha = 0.4f),
+                                                borderColor = Color.White.copy(alpha = 0.15f),
+                                                blurRadius = 15f
+                                            )
+                                        } else Modifier
+                                    )
                             ) {
                                 Icon(
                                     painter = painterResource(R.drawable.skip_previous),
@@ -1238,6 +1270,15 @@ fun BottomSheetPlayer(
                                 modifier = Modifier
                                     .height(68.dp)
                                     .weight(playPauseWeight)
+                                    .then(
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                            Modifier.glassGlow(
+                                                glowColor = textButtonColor,
+                                                intensity = 0.5f,
+                                                cornerRadius = 50.dp
+                                            )
+                                        } else Modifier
+                                    )
                             ) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
@@ -1273,6 +1314,19 @@ fun BottomSheetPlayer(
                                     .height(68.dp)
                                     .weight(sideButtonWeight)
                                     .bouncy(nextInteractionSource)
+                                    .then(
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                                            (playerBackground == PlayerBackgroundStyle.BLUR ||
+                                             playerBackground == PlayerBackgroundStyle.GRADIENT)) {
+                                            Modifier.glassEffect(
+                                                level = GlassLevel.SUBTLE,
+                                                cornerRadius = 50.dp,
+                                                tint = sideButtonContainerColor.copy(alpha = 0.4f),
+                                                borderColor = Color.White.copy(alpha = 0.15f),
+                                                blurRadius = 15f
+                                            )
+                                        } else Modifier
+                                    )
                             ) {
                                 Icon(
                                     painter = painterResource(R.drawable.skip_next),
@@ -1329,6 +1383,15 @@ fun BottomSheetPlayer(
                                     .size(72.dp)
                                     .clip(RoundedCornerShape(playPauseRoundness))
                                     .background(textButtonColor)
+                                    .then(
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                            Modifier.glassGlow(
+                                                glowColor = textButtonColor,
+                                                intensity = 0.4f,
+                                                cornerRadius = playPauseRoundness
+                                            )
+                                        } else Modifier
+                                    )
                                     .clickable {
                                         if (isCasting) {
                                             if (castIsPlaying) {
@@ -1555,7 +1618,18 @@ fun InlineLyricsView(mediaMetadata: MediaMetadata?, showLyrics: Boolean) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(12.dp)),
+            .clip(RoundedCornerShape(12.dp))
+            .then(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    Modifier.glassEffect(
+                        level = GlassLevel.SUBTLE,
+                        cornerRadius = 12.dp,
+                        tint = Color.Black.copy(alpha = 0.2f),
+                        borderColor = Color.White.copy(alpha = 0.1f),
+                        blurRadius = 20f
+                    )
+                } else Modifier
+            ),
         contentAlignment = Alignment.Center
     ) {
         when {
