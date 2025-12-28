@@ -71,8 +71,13 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
+import android.os.Build
 import com.metrolist.music.R
 import com.metrolist.music.ui.screens.settings.AccountSettings
+import com.metrolist.music.ui.utils.GlassLevel
+import com.metrolist.music.ui.utils.glassEffect
+import com.metrolist.music.ui.utils.glassGlow
+import androidx.compose.ui.draw.blur
 import kotlinx.coroutines.delay
 
 @Composable
@@ -89,12 +94,47 @@ fun DefaultDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        Surface(
-            modifier = Modifier.padding(24.dp),
-            shape = AlertDialogDefaults.shape,
-            color = AlertDialogDefaults.containerColor,
-            tonalElevation = AlertDialogDefaults.TonalElevation
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+                .then(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        Modifier.blur(20.dp)
+                    } else Modifier
+                ),
+            contentAlignment = Alignment.Center
         ) {
+            Surface(
+                modifier = Modifier
+                    .padding(24.dp)
+                    .then(
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            Modifier
+                                .glassEffect(
+                                    level = GlassLevel.STRONG,
+                                    cornerRadius = 28.dp,
+                                    tint = AlertDialogDefaults.containerColor.copy(alpha = 0.85f),
+                                    borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                                    blurRadius = 40f
+                                )
+                                .glassGlow(
+                                    glowColor = MaterialTheme.colorScheme.primary,
+                                    intensity = 0.4f,
+                                    cornerRadius = 28.dp
+                                )
+                        } else Modifier
+                    ),
+                shape = RoundedCornerShape(28.dp),
+                color = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    Color.Transparent
+                else
+                    AlertDialogDefaults.containerColor,
+                tonalElevation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    0.dp
+                else
+                    AlertDialogDefaults.TonalElevation
+            ) {
             Column(
                 horizontalAlignment = horizontalAlignment,
                 modifier = modifier
@@ -144,6 +184,7 @@ fun DefaultDialog(
                     }
                 }
             }
+        }
         }
     }
 }

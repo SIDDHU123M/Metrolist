@@ -53,8 +53,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import android.os.Build
 import com.metrolist.music.R
 import com.metrolist.music.ui.screens.OptionStats
+import com.metrolist.music.ui.utils.GlassLevel
+import com.metrolist.music.ui.utils.glassEffect
 
 @Composable
 fun <E> ChipsRow(
@@ -77,12 +80,34 @@ fun <E> ChipsRow(
             FilterChip(
                 label = { Text(label) },
                 selected = currentValue == value,
-                colors = FilterChipDefaults.filterChipColors(
-                    containerColor = containerColor,
-                ),
+                colors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    FilterChipDefaults.filterChipColors(
+                        containerColor = containerColor.copy(alpha = 0.7f),
+                        selectedContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f)
+                    )
+                } else {
+                    FilterChipDefaults.filterChipColors(
+                        containerColor = containerColor,
+                    )
+                },
                 onClick = { onValueUpdate(value) },
                 shape = RoundedCornerShape(16.dp),
-                border = null
+                border = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && currentValue == value) {
+                    FilterChipDefaults.filterChipBorder(
+                        borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
+                        selectedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
+                        borderWidth = 1.dp,
+                        selectedBorderWidth = 1.dp
+                    )
+                } else null,
+                modifier = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && currentValue == value) {
+                    Modifier.glassEffect(
+                        level = GlassLevel.SUBTLE,
+                        cornerRadius = 16.dp,
+                        tint = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
+                        blurRadius = 15f
+                    )
+                } else Modifier
             )
 
             Spacer(Modifier.width(8.dp))

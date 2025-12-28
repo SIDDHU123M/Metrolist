@@ -100,6 +100,7 @@ import com.metrolist.music.playback.queues.LocalAlbumRadio
 import com.metrolist.music.playback.queues.YouTubeAlbumRadio
 import com.metrolist.music.playback.queues.YouTubeQueue
 import com.metrolist.music.ui.component.AlbumGridItem
+import com.metrolist.music.ui.component.AmbientBackground
 import com.metrolist.music.ui.component.ArtistGridItem
 import com.metrolist.music.ui.component.ChipsRow
 import com.metrolist.music.ui.component.HideOnScrollFAB
@@ -384,7 +385,14 @@ fun HomeScreen(
             )
         }
 
-        LazyColumn(
+        AmbientBackground(
+            primaryColor = MaterialTheme.colorScheme.primary,
+            secondaryColor = MaterialTheme.colorScheme.secondary,
+            tertiaryColor = MaterialTheme.colorScheme.tertiary,
+            baseColor = MaterialTheme.colorScheme.surface,
+            animated = true
+        ) {
+            LazyColumn(
             state = lazylistState,
             contentPadding = LocalPlayerAwareWindowInsets.current.asPaddingValues()
         ) {
@@ -831,6 +839,7 @@ fun HomeScreen(
                     }
                 }
             }
+        }
         }
 
         HideOnScrollFAB(

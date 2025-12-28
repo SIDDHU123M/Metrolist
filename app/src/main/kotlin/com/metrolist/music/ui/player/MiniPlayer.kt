@@ -95,6 +95,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import com.metrolist.music.constants.DarkModeKey
 import com.metrolist.music.ui.screens.settings.DarkMode
 import com.metrolist.music.utils.rememberEnumPreference
+import com.metrolist.music.ui.utils.GlassLevel
+import com.metrolist.music.ui.utils.glassEffect
+import com.metrolist.music.ui.utils.glassGlow
+import android.os.Build
 
 @Composable
 fun MiniPlayer(
@@ -284,21 +288,41 @@ private fun NewMiniPlayer(
                     if (isTabletLandscape) {
                         Modifier
                             .width(500.dp)
-                            .align(Alignment.CenterEnd) // Right align
+                            .align(Alignment.CenterEnd)
                     } else {
                         Modifier.fillMaxWidth()
                     }
                 )
-                .height(64.dp) // Circular height
+                .height(64.dp)
                 .offset { IntOffset(offsetXAnimatable.value.roundToInt(), 0) }
-                .clip(RoundedCornerShape(32.dp)) // Clip first for perfect rounded corners
-                .background(
-                    color = if (pureBlack && useDarkTheme) Color.Black else MaterialTheme.colorScheme.surfaceContainer
-                )
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                    shape = RoundedCornerShape(32.dp)
+                .then(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        Modifier.glassEffect(
+                            level = GlassLevel.MEDIUM,
+                            cornerRadius = 32.dp,
+                            tint = if (pureBlack && useDarkTheme)
+                                Color.Black.copy(alpha = 0.85f)
+                            else
+                                MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.8f),
+                            borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                            blurRadius = 30f
+                        ).glassGlow(
+                            glowColor = MaterialTheme.colorScheme.primary,
+                            intensity = 0.3f,
+                            cornerRadius = 32.dp
+                        )
+                    } else {
+                        Modifier
+                            .clip(RoundedCornerShape(32.dp))
+                            .background(
+                                color = if (pureBlack && useDarkTheme) Color.Black else MaterialTheme.colorScheme.surfaceContainer
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(32.dp)
+                            )
+                    }
                 )
         ) {
             Row(
