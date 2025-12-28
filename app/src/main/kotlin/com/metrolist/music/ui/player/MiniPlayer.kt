@@ -298,17 +298,17 @@ private fun NewMiniPlayer(
                 .then(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         Modifier.glassEffect(
-                            level = GlassLevel.MEDIUM,
+                            level = GlassLevel.STRONG,
                             cornerRadius = 32.dp,
                             tint = if (pureBlack && useDarkTheme)
-                                Color.Black.copy(alpha = 0.5f)
+                                Color.Black.copy(alpha = 0.6f)
                             else
-                                MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.8f),
-                            borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                            blurRadius = 10f
+                                MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f),
+                            borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
+                            blurRadius = 20f
                         ).glassGlow(
                             glowColor = MaterialTheme.colorScheme.primary,
-                            intensity = 0.3f,
+                            intensity = 0.5f,
                             cornerRadius = 32.dp
                         )
                     } else {
@@ -318,8 +318,8 @@ private fun NewMiniPlayer(
                                 color = if (pureBlack && useDarkTheme) Color.Black else MaterialTheme.colorScheme.surfaceContainer
                             )
                             .border(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                                width = 1.5.dp,
+                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
                                 shape = RoundedCornerShape(32.dp)
                             )
                     }
@@ -340,7 +340,17 @@ private fun NewMiniPlayer(
                     if (duration > 0) {
                         CircularProgressIndicator(
                             progress = { (position.toFloat() / duration).coerceIn(0f, 1f) },
-                            modifier = Modifier.size(48.dp),
+                            modifier = Modifier
+                                .size(48.dp)
+                                .then(
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                        Modifier.glassGlow(
+                                            glowColor = MaterialTheme.colorScheme.primary,
+                                            intensity = 0.4f,
+                                            cornerRadius = 24.dp
+                                        )
+                                    } else Modifier
+                                ),
                             color = MaterialTheme.colorScheme.primary,
                             strokeWidth = 3.dp,
                             trackColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
@@ -498,17 +508,28 @@ private fun NewMiniPlayer(
                             modifier = Modifier
                                 .size(40.dp)
                                 .clip(CircleShape)
+                                .then(
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isSubscribed) {
+                                        Modifier.glassEffect(
+                                            level = GlassLevel.SUBTLE,
+                                            cornerRadius = 20.dp,
+                                            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                                            borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                                            blurRadius = 10f
+                                        )
+                                    } else Modifier
+                                )
                                 .border(
-                                    width = 1.dp,
+                                    width = if (isSubscribed) 1.5.dp else 1.dp,
                                     color = if (isSubscribed)
-                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
                                     else
                                         MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                                     shape = CircleShape
                                 )
                                 .background(
                                     color = if (isSubscribed)
-                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
                                     else
                                         Color.Transparent,
                                     shape = CircleShape
@@ -560,18 +581,29 @@ private fun NewMiniPlayer(
                         modifier = Modifier
                             .size(40.dp)
                             .clip(CircleShape)
+                            .then(
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isLiked) {
+                                    Modifier.glassEffect(
+                                        level = GlassLevel.SUBTLE,
+                                        cornerRadius = 20.dp,
+                                        tint = MaterialTheme.colorScheme.error.copy(alpha = 0.2f),
+                                        borderColor = MaterialTheme.colorScheme.error.copy(alpha = 0.5f),
+                                        blurRadius = 10f
+                                    )
+                                } else Modifier
+                            )
                             .border(
-                                width = 1.dp,
+                                width = if (isLiked) 1.5.dp else 1.dp,
                                 color = if (isLiked)
-                                    MaterialTheme.colorScheme.error.copy(alpha = 0.5f)
+                                    MaterialTheme.colorScheme.error.copy(alpha = 0.6f)
                                 else
                                     MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                                 shape = CircleShape
                             )
                             .background(
                                 color = if (isLiked)
-                                    MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
-                                else 
+                                    MaterialTheme.colorScheme.error.copy(alpha = 0.15f)
+                                else
                                     Color.Transparent,
                                 shape = CircleShape
                             )

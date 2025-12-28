@@ -7,6 +7,7 @@ package com.metrolist.music.ui.player
 
 import androidx.activity.compose.BackHandler
 import android.annotation.SuppressLint
+import android.os.Build
 import android.text.format.Formatter
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
@@ -132,6 +133,8 @@ import com.metrolist.music.ui.menu.SelectionMediaMetadataMenu
 import com.metrolist.music.ui.utils.ShowMediaInfo
 import com.metrolist.music.utils.makeTimeString
 import com.metrolist.music.utils.rememberPreference
+import com.metrolist.music.ui.utils.GlassLevel
+import com.metrolist.music.ui.utils.glassEffect
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -905,11 +908,24 @@ fun Queue(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
                 ) { }
-                .background(
-                    if (pureBlack) Color.Black
-                    else MaterialTheme.colorScheme
-                        .secondaryContainer
-                        .copy(alpha = 0.90f),
+                .then(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        Modifier.glassEffect(
+                            level = GlassLevel.MEDIUM,
+                            cornerRadius = 0.dp,
+                            tint = if (pureBlack)
+                                Color.Black.copy(alpha = 0.8f)
+                            else
+                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.85f),
+                            borderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                            blurRadius = 15f
+                        )
+                    } else {
+                        Modifier.background(
+                            if (pureBlack) Color.Black
+                            else MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.90f)
+                        )
+                    }
                 )
                 .windowInsetsPadding(
                     WindowInsets.systemBars
@@ -1057,11 +1073,24 @@ fun Queue(
         Box(
             modifier =
             Modifier
-                .background(
-                    if (pureBlack) Color.Black
-                    else MaterialTheme.colorScheme
-                        .secondaryContainer
-                        .copy(alpha = 0.90f),
+                .then(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        Modifier.glassEffect(
+                            level = GlassLevel.MEDIUM,
+                            cornerRadius = 0.dp,
+                            tint = if (pureBlack)
+                                Color.Black.copy(alpha = 0.8f)
+                            else
+                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.85f),
+                            borderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                            blurRadius = 15f
+                        )
+                    } else {
+                        Modifier.background(
+                            if (pureBlack) Color.Black
+                            else MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.90f)
+                        )
+                    }
                 )
                 .fillMaxWidth()
                 .height(

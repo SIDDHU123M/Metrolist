@@ -692,13 +692,13 @@ fun BottomSheetPlayer(
                              playerBackground == PlayerBackgroundStyle.GRADIENT)) {
                             Modifier
                                 .glassEffect(
-                                    level = GlassLevel.MEDIUM,
-                                    cornerRadius = 20.dp,
-                                    tint = Color.Black.copy(alpha = 0.12f),
-                                    borderColor = Color.White.copy(alpha = 0.2f),
-                                    blurRadius = 10f
+                                    level = GlassLevel.STRONG,
+                                    cornerRadius = 24.dp,
+                                    tint = Color.Black.copy(alpha = 0.25f),
+                                    borderColor = Color.White.copy(alpha = 0.3f),
+                                    blurRadius = 20f
                                 )
-                                .padding(horizontal = 16.dp, vertical = 12.dp)
+                                .padding(horizontal = 20.dp, vertical = 16.dp)
                         } else Modifier
                     ),
             ) {
@@ -1229,11 +1229,11 @@ fun BottomSheetPlayer(
                                             (playerBackground == PlayerBackgroundStyle.BLUR ||
                                              playerBackground == PlayerBackgroundStyle.GRADIENT)) {
                                             Modifier.glassEffect(
-                                                level = GlassLevel.SUBTLE,
+                                                level = GlassLevel.MEDIUM,
                                                 cornerRadius = 50.dp,
-                                                tint = sideButtonContainerColor.copy(alpha = 0.2f),
-                                                borderColor = Color.White.copy(alpha = 0.15f),
-                                                blurRadius = 15f
+                                                tint = sideButtonContainerColor.copy(alpha = 0.3f),
+                                                borderColor = Color.White.copy(alpha = 0.25f),
+                                                blurRadius = 20f
                                             )
                                         } else Modifier
                                     )
@@ -1273,11 +1273,19 @@ fun BottomSheetPlayer(
                                     .weight(playPauseWeight)
                                     .then(
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                            Modifier.glassGlow(
-                                                glowColor = textButtonColor,
-                                                intensity = 0.5f,
-                                                cornerRadius = 50.dp
-                                            )
+                                            Modifier
+                                                .glassEffect(
+                                                    level = GlassLevel.STRONG,
+                                                    cornerRadius = 50.dp,
+                                                    tint = textButtonColor.copy(alpha = 0.2f),
+                                                    borderColor = Color.White.copy(alpha = 0.4f),
+                                                    blurRadius = 25f
+                                                )
+                                                .glassGlow(
+                                                    glowColor = textButtonColor,
+                                                    intensity = 0.7f,
+                                                    cornerRadius = 50.dp
+                                                )
                                         } else Modifier
                                     )
                             ) {
@@ -1320,11 +1328,11 @@ fun BottomSheetPlayer(
                                             (playerBackground == PlayerBackgroundStyle.BLUR ||
                                              playerBackground == PlayerBackgroundStyle.GRADIENT)) {
                                             Modifier.glassEffect(
-                                                level = GlassLevel.SUBTLE,
+                                                level = GlassLevel.MEDIUM,
                                                 cornerRadius = 50.dp,
-                                                tint = sideButtonContainerColor.copy(alpha = 0.2f),
-                                                borderColor = Color.White.copy(alpha = 0.15f),
-                                                blurRadius = 15f
+                                                tint = sideButtonContainerColor.copy(alpha = 0.3f),
+                                                borderColor = Color.White.copy(alpha = 0.25f),
+                                                blurRadius = 20f
                                             )
                                         } else Modifier
                                     )
@@ -1619,15 +1627,15 @@ fun InlineLyricsView(mediaMetadata: MediaMetadata?, showLyrics: Boolean) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(16.dp))
             .then(
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     Modifier.glassEffect(
-                        level = GlassLevel.SUBTLE,
-                        cornerRadius = 12.dp,
-                        tint = Color.Black.copy(alpha = 0.2f),
-                        borderColor = Color.White.copy(alpha = 0.1f),
-                        blurRadius = 20f
+                        level = GlassLevel.MEDIUM,
+                        cornerRadius = 16.dp,
+                        tint = Color.Black.copy(alpha = 0.3f),
+                        borderColor = Color.White.copy(alpha = 0.2f),
+                        blurRadius = 30f
                     )
                 } else Modifier
             ),
