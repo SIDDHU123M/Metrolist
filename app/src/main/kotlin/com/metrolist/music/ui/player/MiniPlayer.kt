@@ -75,9 +75,13 @@ import androidx.compose.ui.unit.sp
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
 import com.metrolist.music.LocalDatabase
 import com.metrolist.music.LocalPlayerConnection
 import com.metrolist.music.R
+import android.os.Build
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.platform.LocalContext
 import com.metrolist.music.constants.MiniPlayerHeight
 import com.metrolist.music.constants.MiniPlayerOutlineKey
 import com.metrolist.music.constants.PureBlackMiniPlayerKey
@@ -145,6 +149,7 @@ private fun NewMiniPlayer(
     val (pureBlack, onPureBlackChange) = rememberPreference(PureBlackMiniPlayerKey, defaultValue = false)
     val playerConnection = LocalPlayerConnection.current ?: return
     val database = LocalDatabase.current
+    val context = LocalContext.current
     val isSystemInDarkTheme = isSystemInDarkTheme()
     val darkTheme by rememberEnumPreference(DarkModeKey, defaultValue = DarkMode.AUTO)
     val useDarkTheme = remember(darkTheme, isSystemInDarkTheme) {
@@ -295,36 +300,68 @@ private fun NewMiniPlayer(
                 )
                 .height(64.dp)
                 .offset { IntOffset(offsetXAnimatable.value.roundToInt(), 0) }
-                .then(
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        Modifier.glassEffect(
-                            level = GlassLevel.STRONG,
-                            cornerRadius = 32.dp,
-                            tint = if (pureBlack && useDarkTheme)
-                                Color.Black.copy(alpha = 0.6f)
-                            else
-                                MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f),
-                            borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
-                            blurRadius = 20f
-                        ).glassGlow(
-                            glowColor = MaterialTheme.colorScheme.primary,
-                            intensity = 0.5f,
-                            cornerRadius = 32.dp
-                        )
-                    } else {
-                        Modifier
-                            .clip(RoundedCornerShape(32.dp))
-                            .background(
-                                color = if (pureBlack && useDarkTheme) Color.Black else MaterialTheme.colorScheme.surfaceContainer
-                            )
-                            .border(
-                                width = 1.5.dp,
-                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
-                                shape = RoundedCornerShape(32.dp)
-                            )
-                    }
-                )
+                .clip(RoundedCornerShape(32.dp))
         ) {
+            // Background: Blurred album art
+            mediaMetadata?.let { metadata ->
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(metadata.thumbnailUrl)
+                        .size(200, 200)
+                        .build(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .blur(60.dp)
+                )
+
+                // Dark overlay for contrast
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = if (pureBlack && useDarkTheme) 0.7f else 0.6f))
+                )
+            }
+
+            // Glass effect layer on top
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .then(
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            Modifier.glassEffect(
+                                level = GlassLevel.STRONG,
+                                cornerRadius = 32.dp,
+                                tint = if (pureBlack && useDarkTheme)
+                                    Color.Black.copy(alpha = 0.4f)
+                                else
+                                    MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.5f),
+                                borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
+                                blurRadius = 20f
+                            ).glassGlow(
+                                glowColor = MaterialTheme.colorScheme.primary,
+                                intensity = 0.5f,
+                                cornerRadius = 32.dp
+                            )
+                        } else {
+                            Modifier
+                                .background(
+                                    color = if (pureBlack && useDarkTheme)
+                                        Color.Black.copy(alpha = 0.8f)
+                                    else
+                                        MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.9f)
+                                )
+                                .border(
+                                    width = 1.5.dp,
+                                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                                    shape = RoundedCornerShape(32.dp)
+                                )
+                        }
+                    )
+            )
+
+            // Content on top of glass
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
