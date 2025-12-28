@@ -95,7 +95,9 @@ fun <E> ChipsRow(
                         borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
                         selectedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
                         borderWidth = 1.5.dp,
-                        selectedBorderWidth = 1.5.dp
+                        selectedBorderWidth = 1.5.dp,
+                        enabled = true,
+                        selected = true
                     )
                 } else null
             )

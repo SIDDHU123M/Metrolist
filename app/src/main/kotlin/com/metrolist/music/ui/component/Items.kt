@@ -81,6 +81,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.zIndex
 import androidx.core.graphics.drawable.toBitmapOrNull
+import android.os.Build
+import com.metrolist.music.ui.utils.GlassLevel
+import com.metrolist.music.ui.utils.glassEffect
+import com.metrolist.music.ui.utils.glassGlow
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
@@ -144,7 +148,24 @@ inline fun ListItem(
         modifier = modifier
             .height(ListItemHeight)
             .padding(horizontal = 8.dp)
-            .then(if (isActive) Modifier.clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.secondaryContainer) else Modifier)
+            .then(
+                if (isActive) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .glassEffect(
+                                level = GlassLevel.SUBTLE,
+                                cornerRadius = 12.dp,
+                                tint = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
+                                borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                                blurRadius = 15f
+                            )
+                            .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f))
+                    } else {
+                        Modifier.clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.secondaryContainer)
+                    }
+                } else Modifier
+            )
     ) {
         Box(Modifier.padding(6.dp), contentAlignment = Alignment.Center) { thumbnailContent() }
         Column(Modifier.weight(1f).padding(horizontal = 6.dp)) {
@@ -210,6 +231,18 @@ fun GridItem(
                 Modifier.height(GridThumbnailHeight)
             }
                 .aspectRatio(thumbnailRatio)
+                .clip(RoundedCornerShape(ThumbnailCornerRadius))
+                .then(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        Modifier.glassEffect(
+                            level = GlassLevel.SUBTLE,
+                            cornerRadius = ThumbnailCornerRadius,
+                            tint = Color.Transparent,
+                            borderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f),
+                            blurRadius = 10f
+                        )
+                    } else Modifier
+                )
         ) {
             thumbnailContent()
         }
