@@ -36,6 +36,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import android.os.Build
+import com.metrolist.music.ui.utils.GlassLevel
+import com.metrolist.music.ui.utils.glassEffect
+import com.metrolist.music.ui.utils.glassGlow
 import com.metrolist.music.LocalPlayerAwareWindowInsets
 import com.metrolist.music.R
 import com.metrolist.music.ui.component.IconButton
@@ -135,7 +139,24 @@ fun MoodAndGenresButton(
         modifier
             .height(MoodAndGenresButtonHeight)
             .clip(RoundedCornerShape(6.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .then(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    Modifier
+                        .glassEffect(
+                            level = GlassLevel.MEDIUM,
+                            cornerRadius = 6.dp,
+                            tint = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f),
+                            borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                            blurRadius = 12f
+                        )
+                        .glassGlow(
+                            glowColor = MaterialTheme.colorScheme.tertiary,
+                            intensity = 0.1f,
+                            cornerRadius = 6.dp
+                        )
+                } else Modifier
+            )
             .clickable(onClick = onClick)
             .padding(horizontal = 12.dp),
     ) {

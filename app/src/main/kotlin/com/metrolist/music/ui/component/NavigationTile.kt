@@ -24,6 +24,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import android.os.Build
+import com.metrolist.music.ui.utils.GlassLevel
+import com.metrolist.music.ui.utils.glassEffect
+import com.metrolist.music.ui.utils.glassGlow
 
 @Composable
 fun NavigationTile(
@@ -43,7 +47,24 @@ fun NavigationTile(
             Modifier
                 .size(56.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .then(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        Modifier
+                            .glassEffect(
+                                level = GlassLevel.MEDIUM,
+                                cornerRadius = 28.dp,
+                                tint = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
+                                borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
+                                blurRadius = 12f
+                            )
+                            .glassGlow(
+                                glowColor = MaterialTheme.colorScheme.primary,
+                                intensity = 0.12f,
+                                cornerRadius = 28.dp
+                            )
+                    } else Modifier
+                )
                 .clickable(onClick = onClick),
         ) {
             Icon(
